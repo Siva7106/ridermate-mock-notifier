@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Veloxa</string>
+    <string name="title_activity_main">Veloxa</string>
+    <string name="package_name">com.ridermate.mocknotifier</string>
+    <string name="custom_url_scheme">com.ridermate.mocknotifier</string>
+</resources>
