@@ -1,32 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
-import { postMockNotification } from '../lib/notify';
+import type { OrderFields } from '../data/scenarios';
 import '../styles/order-card.css';
 
 const TOTAL_SECONDS = 15;
 const RING_RADIUS = 18;
 const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
 
-// Same strings the M1 notification-core test already verified on-device
-// (exact android.title / android.text / android.bigText match). Scenario
-// templating arrives in M3 — this card just demonstrates the real UI.
-const ORDER = {
-  fare: 48,
-  cash: 12,
-  total: 60,
-  payment: 'CASH',
-  pickupKm: 1.0,
-  dropKm: 3.4,
-  pickupArea: 'Koramangala',
-  dropArea: 'Indiranagar',
-};
-
-const SAMPLE_NOTIFICATION = {
-  id: 1,
-  channelId: 'veloxa_orders' as const,
-  title: `New ride · ₹${ORDER.total}`,
-  body: `Pickup ${ORDER.pickupKm.toFixed(1)} km · Drop ${ORDER.dropKm.toFixed(1)} km · ${ORDER.pickupArea} → ${ORDER.dropArea}`,
-  largeBody: `Fare ₹${ORDER.fare} + ₹${ORDER.cash} collect\nPickup: ${ORDER.pickupArea} (${ORDER.pickupKm.toFixed(1)} km)\nDrop: ${ORDER.dropArea} (${ORDER.dropKm.toFixed(1)} km)`,
-};
+interface OrderCardProps {
+  fields: OrderFields;
+  onAccept: () => Promise<void>;
+}
 
 function playAppearChime() {
   try {
@@ -52,11 +35,12 @@ function playAppearChime() {
   }
 }
 
-function OrderCard() {
+function OrderCard({ fields, onAccept }: OrderCardProps) {
   const [secondsLeft, setSecondsLeft] = useState(TOTAL_SECONDS);
   const [appearanceKey, setAppearanceKey] = useState(0);
   const [status, setStatus] = useState('');
   const statusTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const isFirstRender = useRef(true);
 
   const rearm = () => {
     setSecondsLeft(TOTAL_SECONDS);
@@ -75,6 +59,16 @@ function OrderCard() {
     }, 1000);
     return () => clearInterval(id);
   }, []);
+
+  // Re-arms whenever a different order is dialed in from the Control Panel,
+  // so switching scenarios reads as a fresh "new order" appearance too.
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    rearm();
+  }, [fields]);
 
   useEffect(() => {
     playAppearChime();
@@ -97,7 +91,7 @@ function OrderCard() {
   const handleAccept = async () => {
     showStatus('Posting notification…');
     try {
-      await postMockNotification(SAMPLE_NOTIFICATION);
+      await onAccept();
       showStatus('Order accepted — check the notification shade.');
     } catch (err) {
       showStatus(`Failed: ${String(err)}`);
@@ -134,8 +128,8 @@ function OrderCard() {
         </div>
 
         <div className="veloxa-fare-row">
-          <span className="veloxa-fare">₹{ORDER.total}</span>
-          <span className="veloxa-payment-chip">{ORDER.payment}</span>
+          <span className="veloxa-fare">₹{fields.total}</span>
+          <span className="veloxa-payment-chip">{fields.payment}</span>
         </div>
 
         <div className="veloxa-route">
@@ -147,21 +141,21 @@ function OrderCard() {
           <div className="veloxa-route-legs">
             <div className="veloxa-leg">
               <div className="veloxa-leg-distance">
-                {ORDER.pickupKm.toFixed(1)} km
+                {fields.pickupKm.toFixed(1)} km
               </div>
-              <div className="veloxa-leg-address">{ORDER.pickupArea}</div>
+              <div className="veloxa-leg-address">{fields.pickupArea}</div>
             </div>
             <div className="veloxa-leg">
               <div className="veloxa-leg-distance">
-                {ORDER.dropKm.toFixed(1)} km
+                {fields.dropKm.toFixed(1)} km
               </div>
-              <div className="veloxa-leg-address">{ORDER.dropArea}</div>
+              <div className="veloxa-leg-address">{fields.dropArea}</div>
             </div>
           </div>
         </div>
 
         <div className="veloxa-total">
-          {(ORDER.pickupKm + ORDER.dropKm).toFixed(1)} km total
+          {(fields.pickupKm + fields.dropKm).toFixed(1)} km total
         </div>
 
         <div className="veloxa-actions">

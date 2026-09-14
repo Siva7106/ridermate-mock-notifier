@@ -1,3 +1,23 @@
+/*
+ * Veloxa's shared design tokens. Kept here (rather than in a per-screen
+ * stylesheet) so they're available regardless of which screen — OrderCard
+ * or ControlPanel — happens to mount first. See CLAUDE.md §8: deliberately
+ * distinct from RiderMate (Manrope/emerald/Remixicon), system fonts only
+ * since the app must work fully offline.
+ */
+:root {
+  --veloxa-font: -apple-system, 'Segoe UI', 'Roboto Condensed', 'Arial Narrow',
+    sans-serif;
+  --veloxa-accent: #2979ff;
+  --veloxa-accent-strong: #1c54c9;
+  --veloxa-backdrop: #0a0c12;
+  --veloxa-card-bg: #ffffff;
+  --veloxa-ink: #12141a;
+  --veloxa-muted: #6b7280;
+  --veloxa-track: #e3e7ee;
+  --veloxa-danger-ink: #4b5563;
+}
+
 *,
 *::before,
 *::after {
@@ -15,4 +35,23 @@ body {
   color-scheme: dark;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* App-shell chrome that must stay visible regardless of which screen
+   (OrderCard or ControlPanel) is currently mounted. */
+.veloxa-view-tab {
+  position: fixed;
+  left: 12px;
+  top: calc(12px + env(safe-area-inset-top, 0px));
+  z-index: 10;
+  font-family: var(--veloxa-font);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  padding: 6px 12px;
+  cursor: pointer;
 }

@@ -1,22 +1,9 @@
 /*
  * Veloxa's own visual identity — deliberately distinct from RiderMate
  * (Manrope / dark emerald green / Remixicon) and from real Rapido's
- * yellow accept-button branding. System fonts only: the app must work
- * fully offline, so no webfonts are loaded. See CLAUDE.md §8.
+ * yellow accept-button branding. Design tokens (fonts/colors) live in
+ * index.css so they're shared with the Control Panel too.
  */
-
-:root {
-  --veloxa-font: -apple-system, 'Segoe UI', 'Roboto Condensed', 'Arial Narrow',
-    sans-serif;
-  --veloxa-accent: #2979ff;
-  --veloxa-accent-strong: #1c54c9;
-  --veloxa-backdrop: #0a0c12;
-  --veloxa-card-bg: #ffffff;
-  --veloxa-ink: #12141a;
-  --veloxa-muted: #6b7280;
-  --veloxa-track: #e3e7ee;
-  --veloxa-danger-ink: #4b5563;
-}
 
 .veloxa-backdrop {
   font-family: var(--veloxa-font);
