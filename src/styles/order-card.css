@@ -235,12 +235,17 @@
 }
 
 .veloxa-watermark {
+  /* Sits above the card (which docks flush to the bottom of the screen
+     and can vary in height), so it stays clear of the card's white
+     background instead of getting painted over — and out of reach of
+     the bottom gesture-nav area. */
   position: fixed;
   right: 12px;
-  bottom: 12px;
+  top: calc(12px + env(safe-area-inset-top, 0px));
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.12em;
-  color: rgba(255, 255, 255, 0.35);
+  color: rgba(255, 255, 255, 0.4);
   pointer-events: none;
+  z-index: 1;
 }
