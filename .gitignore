@@ -18,6 +18,10 @@ dist-ssr
 .idea
 .claude/worktrees
 .DS_Store
+
+# Raw real-order captures (scripts/capture-real-notification.mjs) — may
+# contain real pickup/drop area names. Review before importing/committing.
+captures/
 *.suo
 *.ntvs*
 *.njsproj
