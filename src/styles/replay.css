@@ -1,0 +1,87 @@
+/*
+ * Replay tab — same utilitarian operator chrome as the Control Panel
+ * (control-panel.css), plus a list of captured notifications.
+ */
+
+.veloxa-replay {
+  font-family: var(--veloxa-font);
+  min-height: 100%;
+  background: var(--veloxa-backdrop);
+  color: #f3f4f6;
+  padding: 20px 20px calc(72px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.veloxa-replay-import-btn {
+  align-self: flex-start;
+  padding-left: 18px;
+  padding-right: 18px;
+}
+
+.veloxa-replay-empty {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #8b93a1;
+  border: 1.5px dashed var(--veloxa-track);
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.veloxa-replay-empty code {
+  color: #cbd2dc;
+}
+
+.veloxa-replay-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.veloxa-replay-item {
+  background: var(--veloxa-card-bg);
+  color: var(--veloxa-ink);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.veloxa-replay-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.veloxa-replay-platform {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--veloxa-accent-strong);
+}
+
+.veloxa-replay-title {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.veloxa-replay-body {
+  font-size: 13px;
+  color: var(--veloxa-muted);
+}
+
+.veloxa-replay-fire {
+  align-self: flex-start;
+  height: 36px;
+  padding: 0 18px;
+  margin-top: 6px;
+  font-size: 13px;
+}

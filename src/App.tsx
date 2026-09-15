@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { initNotifications, postMockNotification } from './lib/notify';
 import { buildScenarioNotifications } from './lib/templating';
+import { buildReplayNotification, type CaptureEntry } from './lib/capturePack';
 import { SCENARIOS, type OrderFields, type ScenarioPreset } from './data/scenarios';
 import type { PlatformId } from './data/platforms';
 import OrderCard from './screens/OrderCard';
 import ControlPanel, { type FireDelayMs } from './screens/ControlPanel';
+import ReplayTab from './screens/ReplayTab';
 
 interface PanelState {
   scenarioId: string | null;
@@ -39,8 +41,11 @@ function loadPanelState(): PanelState {
 
 let nextNotificationId = 1;
 
+const VIEWS = ['card', 'panel', 'replay'] as const;
+type View = (typeof VIEWS)[number];
+
 function App() {
-  const [view, setView] = useState<'card' | 'panel'>('card');
+  const [view, setView] = useState<View>('card');
   const [panelState, setPanelState] = useState<PanelState>(loadPanelState);
 
   useEffect(() => {
@@ -95,11 +100,20 @@ function App() {
     }
   };
 
+  const fireReplay = async (entry: CaptureEntry) => {
+    const notification = buildReplayNotification(entry, nextNotificationId);
+    nextNotificationId += 1;
+    await postMockNotification(notification, panelState.fireDelayMs);
+  };
+
+  const nextView = VIEWS[(VIEWS.indexOf(view) + 1) % VIEWS.length];
+
   return (
     <>
-      {view === 'card' ? (
+      {view === 'card' && (
         <OrderCard fields={panelState.fields} onAccept={fireCurrent} />
-      ) : (
+      )}
+      {view === 'panel' && (
         <ControlPanel
           scenarioId={panelState.scenarioId}
           platform={panelState.platform}
@@ -118,12 +132,13 @@ function App() {
           onFire={fireCurrent}
         />
       )}
+      {view === 'replay' && <ReplayTab onFire={fireReplay} />}
       <button
         type="button"
         className="veloxa-view-tab"
-        onClick={() => setView((v) => (v === 'card' ? 'panel' : 'card'))}
+        onClick={() => setView(nextView)}
       >
-        {view === 'card' ? 'PANEL' : 'CARD'}
+        {nextView.toUpperCase()}
       </button>
     </>
   );

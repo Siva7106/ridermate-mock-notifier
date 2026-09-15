@@ -5,8 +5,8 @@ import type { PlatformId } from './platforms';
  * preset demonstrates a specific RiderMate behavior (profit glance, warning
  * flags, both-legs calculation, degraded-input fallback).
  *
- * Replay-mode presets (`replay_real_*`, from real captures) are added in M4
- * once `capture-pack.json` exists — out of scope here.
+ * Real captures are replayed separately — see `lib/capturePack.ts` and
+ * `screens/ReplayTab.tsx` — since they fire verbatim with no templating.
  */
 
 export interface OrderFields {
