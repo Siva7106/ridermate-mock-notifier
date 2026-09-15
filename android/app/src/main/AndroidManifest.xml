@@ -33,6 +33,13 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths"></meta-data>
         </provider>
+
+        <!-- M5: laptop-triggered scenario firing, no intent-filter — reached only
+             via `adb shell am broadcast -n com.ridermate.mocknotifier/.FireReceiver`.
+             exported=true so the shell (a different UID) can deliver to it. -->
+        <receiver
+            android:name=".FireReceiver"
+            android:exported="true" />
     </application>
 
     <!-- Permissions -->
